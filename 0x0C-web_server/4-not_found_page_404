@@ -22,4 +22,4 @@ sudo sed -i "s/listen 80 default_server;/$new_string/" /etc/nginx/sites-enabled/
 sudo nginx -t
 
 # restart nginx after implementing changes
-sudo service nginx restart
+sudo service nginx restartsudo ufw status
