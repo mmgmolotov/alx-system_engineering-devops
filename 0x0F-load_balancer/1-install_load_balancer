@@ -40,8 +40,8 @@ frontend mmgmolotov-tech-frontend
 
 backend mmgmolotov-tech-backend
     balance roundrobin
-    server 421731-web-01 52.3.247.21:80 check
-    server 421731-web-02 34.207.237.255:80 check
+    server web-01 52.3.247.21:80 check
+    server web-02 34.207.237.255:80 check
 "
 
 # shellcheck disable=SC2154
