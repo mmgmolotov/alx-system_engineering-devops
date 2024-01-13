@@ -1,3 +1,4 @@
+global
         log /dev/log    local0
         log /dev/log    local1 notice
         chroot /var/lib/haproxy
@@ -38,8 +39,19 @@ backend http_back
         server 421731-web-01 52.3.247.21:80 check
         server 421731-web-02 34.207.237.255:80 check
 
+
+frontend https_backend
+        bind   0.0.0.0:443 ssl crt /etc/haproxy/certs/www.mmgmolotov.tech.pem
+        http-request add-header X-Forwarded-Proto https
+        acl    letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
+        default_backend http_back
+
+
 frontend http_front
         bind *:80
         bind *:443 ssl crt /etc/haproxy/certs/www.mmgmolotov.tech.pem
          redirect scheme https code 301 if !{ ssl_fc }
          default_backend http_back
+backend letsencrypt-backend
+    server letsencrypt 127.0.0.1:54321
