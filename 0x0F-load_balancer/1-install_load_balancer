@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
-#Double the number of webservers
+
+# Double the number of webservers
 sudo apt update
 sudo apt install haproxy -y
-sudo sh -c 'echo "\nlisten myserver\n\tbind *:80\n\tbalance roundrobin\n\tserver 421731-web-01 52.3.247.21:80 check\n\tserver 421731-web-02 34.207.237.255:80 check\n" >> /etc/haproxy/haproxy.cfg'
+
+# Set the student ID
+student_id="421731"
+
+# Configure HAProxy with the correct hostnames
+webserver1="${student_id}-web-01"
+webserver2="${student_id}-web-02"
+
+sudo sh -c "echo -e \"\nlisten myserver\n\tbind *:80\n\tbalance roundrobin\n\tserver $webserver1 52.3.247.21:80 check\n\tserver $webserver2 34.207.237.255:80 check\n\" >> /etc/haproxy/haproxy.cfg"
+
 sudo service haproxy restart
