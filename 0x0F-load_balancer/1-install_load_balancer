@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Replace [STUDENT_ID] with your actual student ID
 STUDENT_ID="421731"
 
