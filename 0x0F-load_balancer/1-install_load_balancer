@@ -1,41 +1,16 @@
-#!/bin/bash
-# Replace [STUDENT_ID] with your actual student ID
-STUDENT_ID="421731"
+#!/usr/bin/env bash
 
-# Install HAProxy
-sudo apt-get update
-sudo apt-get install -y haproxy
+# Double the number of webservers
+sudo apt update
+sudo apt install haproxy -y
 
-# Configure HAProxy
-sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOL
-global
-    daemon
-    maxconn 256
+# Set the student ID
+student_id="421731"
 
-defaults
-    mode http
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
+# Configure HAProxy with the correct hostnames
+webserver1="${student_id}-web-01"
+webserver2="${student_id}-web-02"
 
-frontend main
-    bind *:80
-    default_backend webservers
+sudo sh -c "echo -e \"\nlisten myserver\n\tbind *:80\n\tbalance roundrobin\n\tserver $webserver1 52.3.247.21:80 check\n\tserver $webserver2 34.207.237.255:80 check\n\" >> /etc/haproxy/haproxy.cfg"
 
-backend webservers
-    balance roundrobin
-    server $STUDENT_ID-web-01 52.3.247.21:80 check
-    server $STUDENT_ID-web-02 34.207.237.255:80 check
-EOL
-
-# Restart HAProxy to apply changes
 sudo service haproxy restart
-
-# Enable HAProxy to be managed via init script
-sudo systemctl enable haproxy
-
-# Verify configuration
-curl -Is 127.0.0.1
-
-# Output success message
-echo "HAProxy installed and configured successfully!"
