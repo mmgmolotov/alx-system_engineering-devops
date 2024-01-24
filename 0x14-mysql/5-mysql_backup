@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Script that generates a back up from a database
-DATE=$(date +'%d-%m-%Y')
-mysqldump -uroot --password="$11" --all-databases > backup.sql
-sudo tar -czf "$DATE".tar.gz backup.sql
+# Bash script that generates a MySQL
+# dump and creates a compressed archive out of it.
+mysqldump -uroot -p"$1" --all-databases > backup.sql
+current_date=$(date "+%d-%m-%Y")
+tar -cvzf "$current_date.tar.gz" backup.sq
