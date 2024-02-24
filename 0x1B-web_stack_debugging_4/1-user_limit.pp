@@ -1,12 +1,9 @@
-# Traffic
-exec {'increase traffic':
-  onlyif  => 'test -e /etc/default/nginx',
-  command => 'sed -i "5s/[0-9]\+/$( ulimit -n )/" /etc/default/nginx',
-  path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+# task 1
+exec { 'hard limit':
+  command => "sed -i 's/5/4000/' /etc/security/limits.conf",
+  path    => '/bin'
 }
-
-# nginx need to be restared 
-exec { 'nginx restart':
-  command => 'nginx restart',
-  path    => '/etc/init.d/'
+exec { 'soft limit':
+  command => "sed -i 's/4/2000/' /etc/security/limits.conf",
+  path    => '/bin'
 }
